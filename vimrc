@@ -12,8 +12,6 @@ set cursorline
 hi CursorLine cterm=none ctermbg=darkgrey term=none
 hi Todo term=standout ctermfg=1
 hi Comment ctermfg=32
-"hi Constant ctermfg=14
-"hi Type ctermfg=10
 
 " auto indent
 set tabstop=4
@@ -27,6 +25,7 @@ set wrap
 "File ext. garbage
 au BufRead,BufNewFile *.pde setfiletype java 
 au BufRead,BufNewFile *.fbs setfiletype c
+au BufRead,BufNewFile BLAME setfiletype c
 
 "Flatbuffers specific stuff that doesn't work anymore?
 syn match cStructure display /table\>/
@@ -39,6 +38,8 @@ syn match cTodo display /@AH[Hh]*\>/
 set number
 
 "utility stuff
+vnoremap // y/<C-R>"<CR>
+nnoremap // /<C-R>"<CR>
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 nmap ;; :w<CR>:sh<CR>
 nmap :: :sh<CR>
@@ -59,12 +60,18 @@ command! -nargs=* W write <args>
 
 "Source vimrc shortcuts
 nmap <space><space> :tabnew ~/.vimrc<CR>
-command! Src w ~/.vimrc | source ~/.vimrc
-command! SRc w ~/.vimrc | source ~/.vimrc
-command! SRC w ~/.vimrc | source ~/.vimrc
+command! Src source ~/.vimrc
+command! SRc source ~/.vimrc
+command! SRC source ~/.vimrc
 
-" command line utils
-command! -nargs=1 Search !search <f-args>
+" Search utils
+command! -nargs=1 DSearch !search <f-args>
+command! -nargs=1 Dsearch !search <f-args>
+command! -nargs=1 DS !search <f-args>
+command! -nargs=1 Ds !search <f-args>
+
+command! -nargs=1 Search !grep -d "skip" -e <f-args> *
+command! -nargs=1 S !grep -d "skip" -e <f-args> *
 
 "Working directory stuff
 command! Swd cd %:p:h
@@ -77,6 +84,19 @@ command! PWD pwd
 command! PWd pwd
 command! Pwd pwd
 
+"perforce
+command! Change !p4 edit %
+command! CHange Change
+command! Ch Change
+command! CH Change
+
+"quick gvim open
+command! Gvim !gvim %
+command! GVim !gvim %
+
+"build util
+command! Build !./buildit.sh
+command! BUild !./buildit.sh
 
 "tabs
 map fk :tabn<CR>
