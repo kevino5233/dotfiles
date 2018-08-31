@@ -13,6 +13,8 @@ hi CursorLine cterm=none ctermbg=darkgrey term=none
 hi Todo term=standout ctermfg=1
 hi Comment ctermfg=32
 
+au GUIEnter * simalt ~x
+
 " auto indent
 set tabstop=4
 set softtabstop=4
@@ -21,6 +23,9 @@ set expandtab
 set smartindent
 set smarttab
 set wrap
+
+" formatting
+set cc=80
 
 "File ext. garbage
 au BufRead,BufNewFile *.pde setfiletype java 
@@ -37,7 +42,7 @@ syn match cTodo display /@AH[Hh]*\>/
 
 set number
 
-"utility stuff
+"navigation utilities
 vnoremap // y/<C-R>"<CR>
 nnoremap // /<C-R>"<CR>
 nnoremap <silent> <C-l> :nohl<CR><C-l>
@@ -52,7 +57,8 @@ map <C-k> <C-b>
 map L $
 map H ^
 imap jj <C-[>
-map ? /<UP>
+nmap <C-c> t,la<CR><C-[>
+imap <C-c> t,la<CR><C-[>
 
 "lets me be sloppy
 command! -nargs=* E edit <args>
@@ -83,12 +89,26 @@ command! CFD echo expand('%:p:h')
 command! PWD pwd
 command! PWd pwd
 command! Pwd pwd
+command! Cpfn let @"=@%
+command! CPfn let @"=@%
+command! CPFn let @"=@%
 
 "perforce
 command! Change !p4 edit %
 command! CHange Change
 command! Ch Change
 command! CH Change
+
+function! Blame()
+    let linenum = line(".")
+    !p4blame % > BLAME
+    tabnew BLAME
+    cal cursor(linenum, 0)
+endfunction
+
+command! Blame call Blame()
+command! BLame call Blame()
+command! BLAme call Blame()
 
 "quick gvim open
 command! Gvim !gvim %
@@ -124,6 +144,7 @@ map fl :tabnew ./<CR>
 
 command! QW  tabclose
 command! Qw  tabclose
+command! Q   :qa
 
 " mouse
 set mouse=a
