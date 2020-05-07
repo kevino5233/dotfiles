@@ -1,8 +1,8 @@
 syntax on
 if has("gui_running")
-colo desert
+    colo desert
 else
-colo torte
+    colo torte
 endif
 set cmdheight=2
 set hlsearch
@@ -17,6 +17,9 @@ set backspace=indent,eol,start
 hi CursorLine cterm=none ctermbg=darkgrey term=none
 hi Todo term=standout ctermfg=1
 hi Comment ctermfg=32
+
+" ctags/cscope/grok
+" set csprg=/bin/cscope
 
 au GUIEnter * simalt ~x
 
@@ -52,11 +55,11 @@ function! OpenFile(filename, destcommand)
     let linenum=0
     let fullname=split(a:filename, ":")
     if len(fullname) > 1
-    let linenum=0+fullname[1]
+        let linenum=0+fullname[1]
     endif
     execute a:destcommand
     execute 'e!' fullname[0]
-cal cursor(linenum, 0)
+    cal cursor(linenum, 0)
 endfunction
 
 "navigation utilities
@@ -98,22 +101,22 @@ command! SRC source ~/.vimrc
 function! DeepSearch(query)
     let filename=@%
     if (filename!="")
-    vs
+        vs
     endif
     ene!
     let cmd="read !search \"" . a:query . "\""
     execute cmd
-    endfunction
+endfunction
 
 function! Search(query)
     let filename=@%
     if (filename!="")
-    vs
+        vs
     endif
     ene!
     let cmd="read !grep -d \"skip\" -e \"" . a:query . "\" * -nr"
     execute cmd
-    endfunction
+endfunction
 
 command! -nargs=1 DSearch call DeepSearch(<f-args>)
 command! -nargs=1 Dsearch call DeepSearch(<f-args>)
@@ -124,7 +127,7 @@ command! -nargs=1 Search call Search(<f-args>)
 command! -nargs=1 S call Search(<f-args>)
 function! Execute(cmd)
     echo split(a:cmd, "")
-    endfunction
+endfunction
 
 vnoremap X y:!<C-R>"<CR>
 vnoremap R y:read !<C-R>"<CR>
@@ -145,19 +148,19 @@ command! CPFn let @"=@%
 function! Header()
     let class=split(@%, "\\.")
     if class[1]=="json"
-    let class=split(@%, "_")
+        let class=split(@%, "_")
     endif
     let switchto=class[0] . ".h"
     execute 'e' switchto
-    endfunction
+endfunction
 function! Cpp()
     let class=split(@%, "\\.")
     if class[1]=="json"
-    let class=split(@%, "_")
+        let class=split(@%, "_")
     endif
     let switchto=class[0] . ".cpp"
     execute 'e' switchto
-    endfunction
+endfunction
 
 command! Header call Header()
 command! HEader call Header()
@@ -223,16 +226,17 @@ function! NotSearch(search)
     let regex='^\(\(.*' . a:search . '\)\@!.\)*$'
     let @/=regex
     execute '/' . regex
-    endfunction
+endfunction
 
 function! BuildCode()
     let filename=@%
     if (filename!="")
-    vs
+        vs
     endif
     ene!
     read !build
-    endfunction
+endfunction
 
-    command! -nargs=1 Ns call NotSearch(<f-args>)
+command! -nargs=1 Ns call NotSearch(<f-args>)
 command! -nargs=1 NS call NotSearch(<f-args>)
+
